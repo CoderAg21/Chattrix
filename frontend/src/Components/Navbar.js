@@ -19,13 +19,15 @@ export default function Navbar() {
     if (!res.ok) {
     } else {
       const data = await res.json();
-      const { email, userId, iat } = data;
-      dispatch(identity(email, userId, iat));
+      console.log(data)
+      const { email, userId, iat } = data.token;
+      console.log(email,userId)
+      dispatch(identity({email, userId, iat}));
       dispatch(loggedIn());
     }
   }
   fetchIdentity();
-  }, []);
+  }, [auth]);
   return (
 <nav className="navbar navbar-expand-lg bg-body-rgb(244, 244, 244)}">
   <div className="container-fluid">

@@ -22,6 +22,7 @@ router.post("/", async (req, res) => {
       const obj = {
         email,
         userId: user.get("_id"),
+        name:user.get('name')
       };
       const token = jwt.sign(obj, config.JWT_TOKEN);
       res.cookie("token", token, {

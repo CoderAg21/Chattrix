@@ -1,15 +1,11 @@
 import React from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {creatMsg} from '../Store/Messages/messageSlice'
 
-export default function ClientMessage(props) {
-  // const msg = useSelector((state) => state.message.value)
+export default function ServerMessage(props) {
   return (
-     <div className="mb-3">
-              <div className="fw-semibold">Jasmin Lowery</div>
-              <div className="bg-white border rounded p-2 shadow-sm d-inline-block">
-                {props.message}
+   <div className="mb-3 text-end">
+              <div className="bg-primary text-white border rounded p-2 d-inline-block">
+             {  props.message}
               </div>
-              </div>
+            </div>
   )
 }

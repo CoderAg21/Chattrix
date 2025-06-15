@@ -10,6 +10,8 @@ import config from '../config/env';
 import { useState } from 'react';
 import { createMsg } from '../Store/Messages/messageSlice';
 import AuthenticateWelcome from './AuthenticateWelcome';
+import socket from './Socket'
+import { changeRoom } from '../Store/room/roomSlice';
 
 
 
@@ -18,33 +20,65 @@ export default function ChatLayout() {
   const  contacts = useSelector((state) => state.contacts.value);
   const msg = useSelector((state) => state.message.value);
   const currentRoom = useSelector((state) => state.room.value);
-  
+  const checkIfOnline = useSelector((state)=>state.checkIfOnline.value)
   const dispatch = useDispatch();
-  useEffect(() => {
-    const fetching = async () => {
-      try {
-        const response = await fetch(`${config.APP_URL}/contacts`,{
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+  const userSocketId = useSelector(state=>state.user.email)
+  const [currentUser,setCurrentUser] = useState('')
+  
+  console.log(userSocketId)
+  
+  
+  
+  useEffect(()=>{
+    socket.on('connect',()=>{
+      console.log('client connected')
+      //  console.log(userSocketId)
+    })
+    const handleRecieve = (msg)=>{
+      setMsgs(prevMsgs=>[...prevMsgs,msg])
+      console.log('recieved')
+      console.log(200)
+      
+    }
+  socket.on('Recieve',handleRecieve)
+   return () => {
+    socket.off("Receive", handleRecieve); // must be same reference
+  };
+  
+ 
+},[])
+//connect to socket.io
+useEffect(() => {  
+  
+  
+  const fetching = async () => {
+    try {
+      const response = await fetch(`${config.APP_URL}/contacts`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
         credentials: 'include',
-        });
-        const data = await response.json();
-        // console.log(data)
-        if (response.ok) {
-          dispatch(fetchContacts(data));
-        } else {
-          console.error('Failed to fetch contacts:');
-        }
-      } catch (error) {
-        console.error('Failed to fetch contacts:', error);
+      });
+      const data = await response.json();
+      // console.log(data)
+      if (response.ok) {
+        dispatch(fetchContacts(data));
+      } else {
+        console.error('Failed to fetch contacts:');
       }
+    } catch (error) {
+      console.error('Failed to fetch contacts:', error);
+    }
     }
     fetching();
   }, [])
 
   useEffect(() => {
+     socket.emit("userOnline",userSocketId)
+    socket.emit("leave room",currentRoom)
+    socket.emit("join room",currentRoom)
+  
     const showStoredMsg = async ()=>{
       const response = await fetch(`${config.APP_URL}/show-message`, {
         method: 'POST',
@@ -69,6 +103,7 @@ export default function ChatLayout() {
   }, [currentRoom])
   
 
+ 
 
   const handleChange = (e) => {
     dispatch(createMsg(e.target.value));
@@ -93,10 +128,10 @@ export default function ChatLayout() {
         sendBy:"You",
         createdAt:Date.now().toLocaleString()
       }
-  
+      socket.emit("send",{msgItem,currentRoom})
       setMsgs(prevMsgs=>[...prevMsgs,msgItem])
-      dispatch(createMsg(''));
-
+      // dispatch(createMsg(''));
+      
       console.log('Message sent successfully');
     } else {
       console.error('Failed to send message');
@@ -104,17 +139,18 @@ export default function ChatLayout() {
   }catch (error) {
     console.error('Failed to send message:', error);
   }
-  }
- 
+}
 
-  return (
-    <div className="container-fluid px-0"style={{background:"rgb(244, 244, 244)"}}>
+
+
+return (
+  <div className="container-fluid px-0"style={{background:"rgb(244, 244, 244)"}}>
       <div className="d-flex vh-100">
       
 
         {/* Contact List */}
         <div
-          className="col-12 col-md-4 col-lg-3 border-end bg-white overflow-auto"
+          className="col-12 border-top col-md-4 col-lg-3 border-end bg-white overflow-auto"
           style={{ maxHeight: '82vh', background:"fcfcfce8" }}
         >
           <div className="p-3 border-bottom position-sticky top-0 bg-white z-1">
@@ -122,7 +158,7 @@ export default function ChatLayout() {
           </div>
           <ul className="list-group list-group-flush">
             {contacts.map((data, index) =>{
-              return <Contact key = {index} name = {data.email} roomID={data.roomId} ></Contact>
+              return <Contact key = {index} setCurrentUser={setCurrentUser} idx = {index} name = {data.name} roomID={data.roomId} ></Contact>
             })}
           </ul>
         </div>
@@ -132,22 +168,22 @@ export default function ChatLayout() {
        (!currentRoom)?<AuthenticateWelcome/>:<div className="col-12 col-md-8 col-lg-9 d-flex flex-column bg-light position-relative">
           
           {/* Chat Header */}
-          <div className="border-bottom px-4 py-3 bg-white position-sticky top-0 z-1">
-            <h5 className="mb-0 fw-semibold">Design chat</h5>
-            <small className="text-muted">23 members, 10 online</small>
+          <div className="border-bottom border-top px-4 py-3 bg-white position-sticky top-0 z-1">
+            <h5 className="mb-0 fw-semibold">{currentUser}</h5>
+            <small style={{color:checkIfOnline === 'online'?"#318931":"rgb(114, 114, 114)"}}><li style={{marginLeft:"11px"}}>{checkIfOnline}</li></small>
           </div>
 
           {/* Chat Messages (Scrollable) */}
           <div
-            className="flex-grow-1 overflow-auto px-4 py-3"
-            style={{ marginBottom: '14vh' }}
+            className=" overflow-auto px-4 py-3"
+            style={{ marginBottom: '14vh',height:"65vh" }}
           >
             {msgs.map((message, index) => {
            
                 return message.sendBy == 'You' ? (
-                  <ServerMessages key={message.createdAt} message={message.message} time={message.createdAt} />
+                  <ClientMessage key={message.createdAt} message={message.message} time={message.createdAt} />
                 ) : (
-                  <ClientMessage key={message.createAt} message={message.message} time={message.createdAt} />
+                  <ServerMessages key={message.createAt} message={message.message} time={message.createdAt} />
                 );
              
             })}

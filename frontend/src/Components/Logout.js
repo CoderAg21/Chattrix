@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import config from "../config/env";
 import { useDispatch } from "react-redux";
 import { loggedOut } from "../Store/auth/authSlice";
+import { changeRoom } from '../Store/room/roomSlice';
+
 
 export default function Logout() {
   const navigator = useNavigate();
@@ -21,6 +23,7 @@ export default function Logout() {
       if (!res.ok) console.error("Something went wrong");
       else {
         dispatch(loggedOut());
+        dispatch(changeRoom(null))
         navigator("/");
       }
     } catch (error) {

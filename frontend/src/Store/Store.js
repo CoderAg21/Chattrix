@@ -5,6 +5,7 @@ import userReducer from "./user/userSlice";
 import contactReducer from "./contacts/contactSlice";
 import messageReducer from "./Messages/messageSlice";
 import roomReducer from "./room/roomSlice";
+import checkIfOnlineReducer from './checkIfOnline/checkIfOnlineSlice'
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     contacts: contactReducer,
     message: messageReducer,
     room: roomReducer,
+    checkIfOnline:checkIfOnlineReducer
   },
 });
 

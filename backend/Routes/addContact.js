@@ -32,7 +32,7 @@ router.post("/",auth, async (req, res) => {
       );
       await userModel.findByIdAndUpdate(
         client._id,
-        {$push: {personAndRoom: {roomId:room._id, email:email}} },
+        {$push: {personAndRoom: {roomId:room._id, email:email,name:client2.name}} },
         { new: true }
       );
 
@@ -46,7 +46,7 @@ router.post("/",auth, async (req, res) => {
       );
       await userModel.findByIdAndUpdate(
         client2._id,
-        {$push:{personAndRoom: {roomId:room._id, email:req.user.email}}},
+        {$push:{personAndRoom: {roomId:room._id, email:req.user.email,name:req.user.name}}},
         { new: true }
       );
       res.json({message: "Contact request sent successfully."});

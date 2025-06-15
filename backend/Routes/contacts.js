@@ -9,13 +9,13 @@ router.post('/',auth, async (req, res) => {
             // Fetch the user from the database
             const user = await userModel.findOne({ _id: userId })
             const contacts = user.personAndRoom
-            console.log(contacts)
+            // console.log(contacts)
            
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
             }  
             // Return the contacts
-          console.log(200)
+          // console.log(200)
             res.status(200).json(contacts);
         
     }

@@ -9,7 +9,8 @@ const userSlice = createSlice({
     iat: null,
   },
   reducers: {
-    identity: (state, email,userId,iat) => {
+    identity: (state,action) => {
+      const {email,userId,iat} = action.payload
         state.email = email;
         state.userId = userId;
         state.iat = iat;

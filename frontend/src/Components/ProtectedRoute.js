@@ -23,16 +23,18 @@ const ProtectedRoute = ({ children }) => {
         }
         return res.json()
         
-      }).then((data)=>{
-        const {email,userId,iat} = data
-        dispatch(identity(email,userId,iat))
+      }).then( (data)=>{
+        // const {email,userId,iat} = data.token
+        // dispatch(identity({email:"12",userId:"11",iat:"11"}))
+        
+    
       })
       .catch(() => setIsAuthenticated(false));
-  }, []);
+    }, []);
+    
+    if (isAuthenticated === null) return <div>Loading...</div>; // or a spinner
+    return isAuthenticated ? children : <Navigate to="/login" />;
 
-  if (isAuthenticated === null) return <div>Loading...</div>; // or a spinner
-
-  return isAuthenticated ? children : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;
