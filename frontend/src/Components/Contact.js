@@ -4,11 +4,9 @@ import { changeRoom } from '../Store/room/roomSlice';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
-import { io } from 'socket.io-client';
 import socket from './Socket';
 import { checkOnline } from '../Store/checkIfOnline/checkIfOnlineSlice';
 export default function Contact(props) {
-  const currentRoom = useSelector((state) => state.room.value);
   const {email,name,roomID,idx,setCurrentUser} = props
   
   const dispatch = useDispatch();
@@ -27,7 +25,7 @@ export default function Contact(props) {
       // console.log(name)
       if  (isOnline) dispatch(checkOnline('online'))
       else dispatch(checkOnline('offline'))
-      console.log(`${email} is ${isOnline ? "Online" : "Offline"}`);
+      // console.log(`${email} is ${isOnline ? "Online" : "Offline"}`);
     })
     }
   return (

@@ -25,7 +25,7 @@ function App() {
       <Route exact path = "/login" element={<Login/>}></Route>
       <Route exact path = "/signup" element={<Signup/>}></Route>
       <Route exact path = "/chat" element={<ProtectedRoute><ChatLayout/></ProtectedRoute>}></Route>
-      <Route exact path = "/logout" element={<ProtectedRoute><Logout/></ProtectedRoute>}></Route>
+      <Route exact path = "/logout" element={<Logout/>}></Route>
       <Route path="/add-contact" element={<ProtectedRoute><AddContact /></ProtectedRoute>} />
       {/* <Route path="/add-group" element={<AddGroup />} /> */}
       {/* <Route path="/profile" element={<Profile/>} /> */}

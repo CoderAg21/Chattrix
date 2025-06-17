@@ -34,5 +34,5 @@ export default function Logout() {
     logout();
   }, []);
 
-  return <div>hello</div>;
+  return <div>Loading</div>;
 }

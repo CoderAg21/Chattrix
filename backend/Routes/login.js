@@ -26,10 +26,10 @@ router.post("/", async (req, res) => {
       };
       const token = jwt.sign(obj, config.JWT_TOKEN);
       res.cookie("token", token, {
-        httpOnly: true,
-        secure: false,
-        sameSite: "strict",
-        maxAge: 86400000,
+       httpOnly: true,
+      secure: true,             // must be true in production (HTTPS)
+      sameSite: "none",         // allow cross-origin cookieAdd commentMore actions
+      maxAge: 86400000  
       });
 
       return res.status(200).json({ msg: "Login Successfully."});

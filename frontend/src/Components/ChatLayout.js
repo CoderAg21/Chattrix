@@ -11,7 +11,6 @@ import { useState } from 'react';
 import { createMsg } from '../Store/Messages/messageSlice';
 import AuthenticateWelcome from './AuthenticateWelcome';
 import socket from './Socket'
-import { changeRoom } from '../Store/room/roomSlice';
 import '../ChatLayout.css'
 
 
@@ -117,8 +116,8 @@ useEffect(() => {
     dispatch(createMsg(e.target.value));
   }
   const handleSubmit = async (e) => {
-    e.preventDefault();
     dispatch(createMsg(msg));
+    e.preventDefault();
     // Send the message to the server
     try {
       const response = await fetch(`${config.APP_URL}/message`, {
@@ -136,12 +135,12 @@ useEffect(() => {
         sendBy:"You",
         createdAt:Date.now().toLocaleString()
       }
-      socket.emit("send",{msgItem,currentRoom})
       setMsgs(prevMsgs=>[...prevMsgs,msgItem])
+      socket.emit("send",{msgItem,currentRoom})
       // console.log(msgs)
-      // dispatch(createMsg(''));
+      dispatch(createMsg(''));
       
-      console.log('Message sent successfully');
+      // console.log('Message sent successfully');
     } else {
       console.error('Failed to send message');
     }
@@ -167,7 +166,7 @@ return (
           </div>
           <ul className="list-group list-group-flush">
             {contacts.map((data, index) =>{
-              console.log(data)
+            
               return <Contact key = {index} setCurrentUser={setCurrentUser} email = {data.email} idx = {index} name = {data.name} roomID={data.roomId} ></Contact>
             })}
           </ul>
@@ -230,7 +229,7 @@ return (
         {/* Mic Icon */}
         <div>
           <button type='submit' onClick={handleSubmit} className="btn btn-primary rounded-circle p-2">
-            <i className="bi bi-mic"></i>
+            <i className="bi bi-send"></i>
           </button>
         </div>
 

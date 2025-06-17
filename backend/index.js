@@ -10,7 +10,7 @@ const {Server} = require('socket.io');
 const server = http.createServer(app);
 const onlineUsers = new Map(); // userId => socket.id
 app.use(cors({
-  origin: 'http://localhost:3000', 
+  origin: config.FRONTEND_URL, 
   credentials: true
 }));
 //connect the database
@@ -19,7 +19,7 @@ db();
 //socket logic for server
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // your frontend port
+    origin: config.FRONTEND_URL, // your frontend port
    methods:["POST",'GET'],
     credentials: true,
   },

@@ -26,8 +26,8 @@ export default function AddContact() {
         throw new Error('Failed to add contact');
       }
 
-      const data = await res.json();
-      console.log(data)
+    
+      
       setMessage(`Contact added successfully.`);
       setEmail('');
     } catch (error) {
