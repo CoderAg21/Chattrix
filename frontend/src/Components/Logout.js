@@ -19,6 +19,8 @@ export default function Logout() {
         credentials: "include",
         body: JSON.stringify(),
       });
+      const result = await res.json()
+    
 
       if (!res.ok) console.error("Something went wrong");
       else {
