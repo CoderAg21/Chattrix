@@ -4,6 +4,7 @@ import { useState } from 'react';
 import config from '../config/env';
 export default function Register() {
   const navigate = useNavigate()
+  const [message,setMessage] = useState('')
   const [form,setForm] = useState('')
   const handleChange = (e) =>{
     setForm({...form,[e.target.name]:e.target.value})
@@ -19,15 +20,18 @@ export default function Register() {
             body: JSON.stringify(form)
           });
           if (!res.ok) {
+            setMessage("Signup failed.Please try again later.")
             throw new Error('Signup failed');
-            
           }
           else{
-            const result = await res.json()
-            navigate('/login');
+            setTimeout(() => {
+              
+              navigate('/login');
+            }, 500);
           }
-
+          
         } catch (error) {
+          setMessage("Signup failed.Please try again later.")
           console.log(error)
         }
   }
@@ -41,8 +45,8 @@ export default function Register() {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3 text-start">
-              <label onChange={handleChange} htmlFor="name" className="form-label fw-semibold">Full Names <span className='fst-italic text-muted'>(It will be shown to your contacts)</span></label>
-              <input
+              <label  htmlFor="name" className="form-label fw-semibold">Full Names <span className='fst-italic text-muted'>(It will be shown to your contacts)</span></label>
+              <input onChange={handleChange}
                 type="text"
                 name="name"
                 id="name"
@@ -53,8 +57,8 @@ export default function Register() {
             </div>
 
             <div className="mb-3 text-start">
-              <label onChange={handleChange} htmlFor="email" className="form-label fw-semibold">Email address</label>
-              <input
+              <label  htmlFor="email" className="form-label fw-semibold">Email address</label>
+              <input onChange={handleChange}
                 type="email"
                 name="email"
                 id="email"
@@ -65,8 +69,8 @@ export default function Register() {
             </div>
 
             <div className="mb-3 text-start">
-              <label onChange={handleChange} htmlFor="password" className="form-label fw-semibold">Password</label>
-              <input
+              <label  htmlFor="password" className="form-label fw-semibold">Password</label>
+              <input onChange={handleChange}
                 type="password"
                 name="password"
                 id="password"
@@ -77,8 +81,8 @@ export default function Register() {
             </div>
 
             <div className="mb-4 text-start">
-              <label onChange={handleChange} htmlFor="confirmPassword" className="form-label fw-semibold">Confirm Password</label>
-              <input
+              <label  htmlFor="confirmPassword" className="form-label fw-semibold">Confirm Password</label>
+              <input onChange={handleChange}
                 type="password"
                 name="confirmPassword"
                 id="confirmPassword"
@@ -94,6 +98,11 @@ export default function Register() {
           <div className="mt-3">
             <small className="text-muted">Already have an account? <Link tp="/login" className="text-primary fw-semibold">Login</Link></small>
           </div>
+           {message && (
+          <div className="alert alert-danger mt-4 text-center" role="alert">
+            {message}
+          </div>
+        )}
         </div>
       </main>
 

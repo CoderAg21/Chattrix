@@ -12,10 +12,12 @@ import { createMsg } from '../Store/Messages/messageSlice';
 import AuthenticateWelcome from './AuthenticateWelcome';
 import socket from './Socket'
 import { changeRoom } from '../Store/room/roomSlice';
+import '../ChatLayout.css'
 
 
 
 export default function ChatLayout() {
+
   const [msgs, setMsgs] = useState([]);
   const  contacts = useSelector((state) => state.contacts.value);
   const msg = useSelector((state) => state.message.value);
@@ -25,29 +27,32 @@ export default function ChatLayout() {
   const userSocketId = useSelector(state=>state.user.email)
   const [currentUser,setCurrentUser] = useState('')
   
-  console.log(userSocketId)
+ 
   
   
   
   useEffect(()=>{
     socket.on('connect',()=>{
-      console.log('client connected')
-      //  console.log(userSocketId)
     })
-    const handleRecieve = (msg)=>{
+    socket.on('Recieve',(msg)=>{
       setMsgs(prevMsgs=>[...prevMsgs,msg])
-      console.log('recieved')
-      console.log(200)
+     
+        console.log(msgs)
+
+      })
+    // const handleRecieve = (msg)=>{
       
-    }
-  socket.on('Recieve',handleRecieve)
-   return () => {
-    socket.off("Receive", handleRecieve); // must be same reference
-  };
+
+      
+    // }
+  //  ret/urn () => {
+    // soc/ket.off("Receive", handleRecieve); // must be same reference
+  
   
  
 },[])
 //connect to socket.io
+
 useEffect(() => {  
   
   
@@ -75,6 +80,7 @@ useEffect(() => {
   }, [])
 
   useEffect(() => {
+    
      socket.emit("userOnline",userSocketId)
     socket.emit("leave room",currentRoom)
     socket.emit("join room",currentRoom)
@@ -94,6 +100,7 @@ useEffect(() => {
         // Assuming data is an array of messages
         setMsgs([]); // Clear previous messages
         setMsgs(prevMsgs => [...prevMsgs,...data]);
+        
      
       } else {
         console.error('Failed to fetch messages');
@@ -106,6 +113,7 @@ useEffect(() => {
  
 
   const handleChange = (e) => {
+    // console.log(e.target.value)
     dispatch(createMsg(e.target.value));
   }
   const handleSubmit = async (e) => {
@@ -130,6 +138,7 @@ useEffect(() => {
       }
       socket.emit("send",{msgItem,currentRoom})
       setMsgs(prevMsgs=>[...prevMsgs,msgItem])
+      // console.log(msgs)
       // dispatch(createMsg(''));
       
       console.log('Message sent successfully');
@@ -145,7 +154,7 @@ useEffect(() => {
 
 return (
   <div className="container-fluid px-0"style={{background:"rgb(244, 244, 244)"}}>
-      <div className="d-flex vh-100">
+      <div className="d-flex vh-100 chatScreen">
       
 
         {/* Contact List */}
@@ -158,14 +167,15 @@ return (
           </div>
           <ul className="list-group list-group-flush">
             {contacts.map((data, index) =>{
-              return <Contact key = {index} setCurrentUser={setCurrentUser} idx = {index} name = {data.name} roomID={data.roomId} ></Contact>
+              console.log(data)
+              return <Contact key = {index} setCurrentUser={setCurrentUser} email = {data.email} idx = {index} name = {data.name} roomID={data.roomId} ></Contact>
             })}
           </ul>
         </div>
 
         {/* Chat Area */}
        {
-       (!currentRoom)?<AuthenticateWelcome/>:<div className="col-12 col-md-8 col-lg-9 d-flex flex-column bg-light position-relative">
+       (!currentRoom)?<AuthenticateWelcome/>:<div style={{background:'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvTNvmAB7U4bI9MMmOuGUCHcpmKXwGZ4z_EA&s)'}} className="col-12 col-md-8 col-lg-9 d-flex flex-column bg-light position-relative">
           
           {/* Chat Header */}
           <div className="border-bottom border-top px-4 py-3 bg-white position-sticky top-0 z-1">
@@ -175,15 +185,15 @@ return (
 
           {/* Chat Messages (Scrollable) */}
           <div
-            className=" overflow-auto px-4 py-3"
+            className=" overflow-auto px-4 py-3 msgScreen"
             style={{ marginBottom: '14vh',height:"65vh" }}
           >
             {msgs.map((message, index) => {
            
                 return message.sendBy == 'You' ? (
-                  <ClientMessage key={message.createdAt} message={message.message} time={message.createdAt} />
+                  <ClientMessage key={index} message={message.message} time={message.createdAt} />
                 ) : (
-                  <ServerMessages key={message.createAt} message={message.message} time={message.createdAt} />
+                  <ServerMessages key={index.createAt} message={message.message} time={message.createdAt} />
                 );
              
             })}
@@ -194,15 +204,17 @@ return (
       className="position-fixed end-0 w-100 bg-white px-0 py-2 border-top"
       style={{ bottom: '3rem', height: '10vh', zIndex: 999 }}
     >
-      <div className="container h-100 d-flex align-items-center justify-content-center float-end"style={{paddingLeft:"10vw"}}>
+      <div className="container msgType h-100 d-flex align-items-center justify-content-center float-end"style={{paddingLeft:"10vw"}}>
 
         {/* Left Icons */}
         <div className="d-flex align-items-center gap-2">
-          <button className="btn btn-light rounded-circle p-2">
+          {/* <button className="btn btn-light rounded-circle p-2">
             <i className="bi bi-emoji-smile"></i>
-          </button>
+          </button> */}
           <button className="btn btn-light rounded-circle p-2">
-            <i className="bi bi-paperclip"></i>
+            <label htmlFor="uploadImg"> <i className="bi bi-paperclip"> </i></label>
+            <input onChange={handleChange} type="file" name="/img" id="uploadImg" accept='image/*' style={{display:"none"}}></input>
+           
           </button>
         </div>
 

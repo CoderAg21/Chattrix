@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import config from '../config/env';
-// import { useDispatch } from 'react-redux';/
+import { Link } from 'react-router-dom';
 export default function AddContact() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -28,7 +28,7 @@ export default function AddContact() {
 
       const data = await res.json();
       console.log(data)
-      setMessage(`Contact request sent to ${data.email}`);
+      setMessage(`Contact added successfully.`);
       setEmail('');
     } catch (error) {
       setMessage('Error adding contact. Please try again.');
@@ -59,6 +59,7 @@ export default function AddContact() {
             <button type="submit" className="btn btn-primary rounded-pill py-2">
               Add Contact
             </button>
+            <Link to ='/chat'><div style={{textAlign:"center",marginTop:"10px"}}>Back to chat.</div></Link>
           </div>
         </form>
 

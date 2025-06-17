@@ -1,7 +1,8 @@
 const express = require("express")
 const router = express.Router()
+const auth = require('../middlewares/auth')
 
-router.post('/',(req,res)=>{
+router.post('/',auth,(req,res)=>{
     res.clearCookie('token')
     res.status(200).json({message: "Logout successful"})
 })

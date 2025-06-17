@@ -6,7 +6,7 @@ const messageModel = require('../models/messageSchema'); // Assuming you have a 
 router.post('/',auth, async (req, res) => {
     const toSend = []
     const {roomId} = req.body
-    console.log('roomId:', roomId);
+    // console.log('roomId:', roomId);
   try {
     // Assuming you have a message model to fetch stored messages
     const storedMessages = await messageModel.find({roomId:roomId}).sort({ createdAt: 1 })

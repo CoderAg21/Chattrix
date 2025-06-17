@@ -9,14 +9,13 @@ import { loggedIn } from "../Store/auth/authSlice";
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [message,setMessage] = useState('')
 
   
   const [form, setForm] = useState(null);
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    console.log(form);
   };
-  console.log(process.env);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -29,6 +28,7 @@ export default function Login() {
         body: JSON.stringify(form),
       });
       if (!res.ok) {
+        setMessage("Login failed. Please try again later")
         navigate("/login");
         throw new Error("Login failed");
       } else {
@@ -39,6 +39,7 @@ export default function Login() {
       
       // console.log('✅ Login Success:', data);
     } catch (error) {
+      setMessage("Login failed. Please try again later")
       console.log(error)
     }
   };
@@ -94,6 +95,11 @@ export default function Login() {
               </Link>
             </small>
           </div>
+      {message && (
+          <div className="alert alert-danger mt-4 text-center" role="alert">
+            {message}
+          </div>
+        )}
         </div>
       </main>
     </div>

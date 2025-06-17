@@ -16,6 +16,7 @@ app.use(cors({
 //connect the database
 db();
 
+//socket logic for server
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000", // your frontend port
@@ -26,12 +27,9 @@ const io = new Server(server, {
 
 
 io.on("connection", (socket) => {
-  console.log("✅ New socket connection:", socket.id);
-
   socket.on("userOnline", (userId) => {
     onlineUsers.set(userId, socket.id);
-    console.log(`${userId} is online`);
-    console.log(onlineUsers)
+    
   })
   socket.on("checkOnline", (targetUserId, callback) => {
     const isOnline = onlineUsers.has(targetUserId);
@@ -41,11 +39,12 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     for (let [key, value] of onlineUsers) {
   if (value === socket.id) {
+    socket.broadcast.emit('goesOffline',key)
     onlineUsers.delete(key);
-    break; // if you only want to delete the first match
+    break;
   }
 }
-    console.log("❌ Disconnected:", socket.id);
+   
   });
   socket.on('join room',(room)=>{
     socket.join(room)
@@ -55,8 +54,7 @@ io.on("connection", (socket) => {
   })
   socket.on("send", ({msgItem,currentRoom}) => {
     msgItem.sendBy = 'Server'
-    console.log(msgItem,currentRoom)
-  socket.to(currentRoom).emit('Recieve',(msgItem))
+    socket.to(currentRoom).emit('Recieve',(msgItem))
 
 });
 
@@ -76,6 +74,5 @@ app.use('/show-message', require('./Routes/showStoredMessages'));
 
 
 server.listen(config.PORT, () => {
-    console.log(`Server is running on port ${config.PORT}`);
 }  );
 // app.use(cors({
