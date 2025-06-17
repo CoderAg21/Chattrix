@@ -48,7 +48,7 @@ export default function Welcome() {
           </div>
         </div>
 
-        <div className="mt-5">
+        <div className="mt-5 mb-4">
           <Link to={auth?"/chat":"/login"} className="btn btn-primary btn-lg fw-semibold px-4 py-2">
             Start Chatting
           </Link>
