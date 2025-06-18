@@ -1,7 +1,5 @@
 @media screen and (max-width:770px) {
-    .chatScreen h1{
-        display: none !important;
-    }
+    
     .chatScreen{
         flex-direction: column;
     }
