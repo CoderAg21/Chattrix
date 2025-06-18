@@ -6,7 +6,7 @@ export default function Spinner(props) {
   return (
 <div className="justify-content-center mt-1" style={{display:showSpinner,position,top,right,margin}}>
   <div className="spinner-border" role="status">
-    <span className="visually-hidden">Loading...</span>
+    <span className="visually-hidden mt-1">Loading...</span>
   </div>
 </div>
   )
