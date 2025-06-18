@@ -28,15 +28,28 @@ const io = new Server(server, {
 
 
 io.on("connection", (socket) => {
+
+  
   socket.on("userOnline", (userId) => {
     onlineUsers.set(userId, socket.id);
-    
   })
+
   socket.on("checkOnline", (targetUserId, callback) => {
     const isOnline = onlineUsers.has(targetUserId);
     callback(isOnline);
   });
 
+  socket.on('join room',(room)=>{
+    socket.join(room)
+  })
+  socket.on('leave room',(room)=>{
+    socket.leave(room)
+  })
+  socket.on("send", ({msgItem,currentRoom}) => {
+    msgItem.sendBy = 'Server'
+    socket.to(currentRoom).emit('Recieve',(msgItem))
+    
+  });
   socket.on("disconnect", () => {
     for (let [key, value] of onlineUsers) {
   if (value === socket.id) {
@@ -47,17 +60,6 @@ io.on("connection", (socket) => {
 }
    
   });
-  socket.on('join room',(room)=>{
-    socket.join(room)
-  })
-  socket.on('leave room',(room)=>{
-    socket.leave(room)
-  })
-  socket.on("send", ({msgItem,currentRoom}) => {
-    msgItem.sendBy = 'Server'
-    socket.to(currentRoom).emit('Recieve',(msgItem))
-
-});
 
 });
 

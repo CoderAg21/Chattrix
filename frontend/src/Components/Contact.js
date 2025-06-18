@@ -11,12 +11,12 @@ export default function Contact(props) {
   
   const dispatch = useDispatch();
   useEffect(() => {
-    // console.log(9990,props)
+ 
     socket.on('goesOffline',(id)=>{
-      // console.log(email)
     if(id == email) dispatch(checkOnline('offline'))
     })
   }, [socket])
+
   
     const handleClick = () =>{
       dispatch(changeRoom(roomID));
@@ -36,7 +36,7 @@ export default function Contact(props) {
                 ></img>
                 <div>
                   <strong>{name}</strong>
-                  {/* <div className="text-muted small">Last message...</div> */}
+             
                 </div>
               </li>
   )

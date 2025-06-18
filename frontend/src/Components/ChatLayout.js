@@ -50,18 +50,8 @@ export default function ChatLayout() {
         console.log(msgs)
 
       })
-    // const handleRecieve = (msg)=>{
-      
-
-      
-    // }
-  //  ret/urn () => {
-    // soc/ket.off("Receive", handleRecieve); // must be same reference
-  
-  
  
 },[])
-//connect to socket.io
 
 useEffect(() => {  
   
@@ -197,12 +187,12 @@ return (
           {/* Chat Header */}
           <div className="border-bottom border-top px-4 py-3 bg-white position-sticky top-0 z-1">
             <h5 className="mb-0 fw-semibold">{currentUser}</h5>
-            <small style={{color:checkIfOnline === 'online'?"#318931":"rgb(114, 114, 114)"}}><li style={{marginLeft:"11px"}}>{checkIfOnline}</li></small>
+            <small style={{color:checkIfOnline === 'online'?"#318931":"rgb(114, 114, 114)"}}>&#8226; {checkIfOnline}</small>
           </div>
 
           {/* Chat Messages (Scrollable) */}
           <div ref={containerRef}
-            className=" overflow-auto px-4 py-3 msgScreen"
+            className=" overflow-auto d-flex flex-column px-4 py-3 msgScreen"
             style={{ marginBottom: '14vh',height:"65vh" }}
           >
             {msgs.map((message, index) => {
