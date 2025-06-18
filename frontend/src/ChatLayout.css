@@ -8,5 +8,8 @@
     .msgType{
         padding: 0 !important;
     }
-    
+    .MsgScreen{
+        margin-top: 1rem;
+        border-top: 2px solid #f1dbdb;
+    }
 }

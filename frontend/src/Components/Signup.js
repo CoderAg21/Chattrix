@@ -2,14 +2,20 @@ import React from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import config from '../config/env';
+import { showSpinner } from '../Store/spinner/spinnerSlice';
+import { useDispatch } from 'react-redux';
+import Spinner from './Spinner';
+
 export default function Register() {
   const navigate = useNavigate()
   const [message,setMessage] = useState('')
   const [form,setForm] = useState('')
+  const dispatch = useDispatch()
   const handleChange = (e) =>{
     setForm({...form,[e.target.name]:e.target.value})
   }
   const handleSubmit = async (e) =>{
+    dispatch(showSpinner("flex"))
     e.preventDefault()
       try {
           const res = await fetch(`${config.APP_URL}/signup`, {
@@ -19,6 +25,9 @@ export default function Register() {
             },
             body: JSON.stringify(form)
           });
+
+          dispatch(showSpinner('none'))
+
           if (!res.ok) {
             setMessage("Signup failed.Please try again later.")
             throw new Error('Signup failed');
@@ -98,6 +107,7 @@ export default function Register() {
           <div className="mt-3">
             <small className="text-muted">Already have an account? <Link tp="/login" className="text-primary fw-semibold">Login</Link></small>
           </div>
+          <Spinner></Spinner>
            {message && (
           <div className="alert alert-danger mt-4 text-center" role="alert">
             {message}

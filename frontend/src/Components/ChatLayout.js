@@ -12,6 +12,9 @@ import { createMsg } from '../Store/Messages/messageSlice';
 import AuthenticateWelcome from './AuthenticateWelcome';
 import socket from './Socket'
 import '../ChatLayout.css'
+import { useRef } from 'react';
+import Spinner from './Spinner';
+import { showSpinner } from '../Store/spinner/spinnerSlice';
 
 
 
@@ -25,8 +28,16 @@ export default function ChatLayout() {
   const dispatch = useDispatch();
   const userSocketId = useSelector(state=>state.user.email)
   const [currentUser,setCurrentUser] = useState('')
+  const containerRef = useRef(null);
   
- 
+
+//New msgs will be seen without manual scroll
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }, [msgs]);
   
   
   
@@ -56,6 +67,7 @@ useEffect(() => {
   
   
   const fetching = async () => {
+    dispatch(showSpinner('flex'))
     try {
       const response = await fetch(`${config.APP_URL}/contacts`,{
         method: 'POST',
@@ -65,7 +77,7 @@ useEffect(() => {
         credentials: 'include',
       });
       const data = await response.json();
-      // console.log(data)
+      dispatch(showSpinner('none'))
       if (response.ok) {
         dispatch(fetchContacts(data));
       } else {
@@ -79,8 +91,11 @@ useEffect(() => {
   }, [])
 
   useEffect(() => {
-    
-     socket.emit("userOnline",userSocketId)
+    setMsgs([]); // Clear previous messages
+
+    dispatch(showSpinner('flex'))
+
+    socket.emit("userOnline",userSocketId)
     socket.emit("leave room",currentRoom)
     socket.emit("join room",currentRoom)
   
@@ -93,11 +108,13 @@ useEffect(() => {
         body: JSON.stringify({roomId:currentRoom}),
         credentials: 'include',
       });
+
+      dispatch(showSpinner("none"))
+      
       if (response.ok) {
         const data = await response.json();
         // console.log("fetched successfully")
         // Assuming data is an array of messages
-        setMsgs([]); // Clear previous messages
         setMsgs(prevMsgs => [...prevMsgs,...data]);
         
      
@@ -163,6 +180,7 @@ return (
         >
           <div className="p-3 border-bottom position-sticky top-0 bg-white z-1">
             <h5 className="mb-0 fw-bold text-primary">Contacts</h5>
+            <Spinner position = 'absolute' right='0' top='13px' margin='1rem' ></Spinner>
           </div>
           <ul className="list-group list-group-flush">
             {contacts.map((data, index) =>{
@@ -174,7 +192,7 @@ return (
 
         {/* Chat Area */}
        {
-       (!currentRoom)?<AuthenticateWelcome/>:<div style={{background:'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvTNvmAB7U4bI9MMmOuGUCHcpmKXwGZ4z_EA&s)'}} className="col-12 col-md-8 col-lg-9 d-flex flex-column bg-light position-relative">
+       (!currentRoom)?<AuthenticateWelcome/>:<div style={{background:'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvTNvmAB7U4bI9MMmOuGUCHcpmKXwGZ4z_EA&s)'}} className="MsgScreen col-12 col-md-8 col-lg-9 d-flex flex-column bg-light position-relative">
           
           {/* Chat Header */}
           <div className="border-bottom border-top px-4 py-3 bg-white position-sticky top-0 z-1">
@@ -183,7 +201,7 @@ return (
           </div>
 
           {/* Chat Messages (Scrollable) */}
-          <div
+          <div ref={containerRef}
             className=" overflow-auto px-4 py-3 msgScreen"
             style={{ marginBottom: '14vh',height:"65vh" }}
           >

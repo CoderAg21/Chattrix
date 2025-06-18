@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import config from "../config/env";
 import {useDispatch} from 'react-redux'
 import { loggedIn } from "../Store/auth/authSlice";
+import Spinner from "./Spinner";
+import { showSpinner } from "../Store/spinner/spinnerSlice";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -17,6 +19,7 @@ export default function Login() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
   const handleSubmit = async (e) => {
+    dispatch(showSpinner("flex"))
     e.preventDefault();
     try {
       const res = await fetch(`${config.APP_URL}/login`, {
@@ -27,6 +30,7 @@ export default function Login() {
         credentials:"include",
         body: JSON.stringify(form),
       });
+      dispatch(showSpinner('none'))
       if (!res.ok) {
         setMessage("Login failed. Please try again later")
         navigate("/login");
@@ -95,6 +99,7 @@ export default function Login() {
               </Link>
             </small>
           </div>
+          <Spinner></Spinner>
       {message && (
           <div className="alert alert-danger mt-4 text-center" role="alert">
             {message}

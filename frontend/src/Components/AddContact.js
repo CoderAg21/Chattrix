@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import config from '../config/env';
 import { Link } from 'react-router-dom';
+import Spinner from './Spinner';
+import { showSpinner } from '../Store/spinner/spinnerSlice';
+import { useDispatch } from 'react-redux';
 export default function AddContact() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const dispatch = useDispatch()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    dispatch(showSpinner("flex"))
     if (!email) {
       setMessage('Please enter a valid email address');
       return;
@@ -20,6 +25,7 @@ export default function AddContact() {
         body: JSON.stringify({ email }),
         credentials: 'include', // send cookies
       });
+      dispatch(showSpinner("none"))
       // console.log(res);
 
       if (!res.ok) {

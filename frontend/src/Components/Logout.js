@@ -4,13 +4,15 @@ import config from "../config/env";
 import { useDispatch } from "react-redux";
 import { loggedOut } from "../Store/auth/authSlice";
 import { changeRoom } from '../Store/room/roomSlice';
-
+import Spinner from "./Spinner";
+import { showSpinner } from "../Store/spinner/spinnerSlice";
 
 export default function Logout() {
   const navigator = useNavigate();
   const dispatch = useDispatch();
   const logout = async () => {
     try {
+      dispatch(showSpinner('flex'))
       const res = await fetch(`${config.APP_URL}/logout`, {
         method: "POST",
         headers: {
@@ -19,9 +21,9 @@ export default function Logout() {
         credentials: "include",
         body: JSON.stringify(),
       });
-      const result = await res.json()
-    
 
+      dispatch(showSpinner('none'))
+      
       if (!res.ok) console.error("Something went wrong");
       else {
         dispatch(loggedOut());
@@ -36,5 +38,5 @@ export default function Logout() {
     logout();
   }, []);
 
-  return <div>Loading</div>;
+  return <Spinner/>
 }

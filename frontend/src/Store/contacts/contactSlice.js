@@ -5,8 +5,6 @@ const contactSlice = createSlice({
   name: "contacts",
   initialState: {
     value:[
-      
-// {roomId: '684ed48b470bdc62a1e698c5', email: 'abhay1@gmail.com', name: 'abhay1'}, { roomId: "684ed48b470bdc62a1e698c5", email: "abhay@gmail.com", name: "abhay" }//abhay1
     ],
   },
   reducers: {

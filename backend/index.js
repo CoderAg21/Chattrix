@@ -8,6 +8,7 @@ const db = require('./config/db');
 const http = require('http');
 const {Server} = require('socket.io');
 const server = http.createServer(app);
+
 const onlineUsers = new Map(); // userId => socket.id
 app.use(cors({
   origin: config.FRONTEND_URL, 

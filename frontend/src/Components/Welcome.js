@@ -19,7 +19,7 @@ export default function Welcome() {
           </p>
         </div>
 
-        <div className="row w-100 row-cols-1 row-cols-md-3 g-4 justify-content-center">
+        <div className="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
           <div className="col">
             <div className="card bg-white text-dark h-100 shadow-sm border border-0">
               <div className="card-body">
