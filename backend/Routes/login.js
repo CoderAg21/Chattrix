@@ -24,7 +24,10 @@ router.post("/", async (req, res) => {
         userId: user.get("_id"),
         name:user.get('name')
       };
+      // console.log(config.JWT_TOKEN)
       const token = jwt.sign(obj, config.JWT_TOKEN);
+      
+
       res.cookie("token", token, {
        httpOnly: true,
       secure: true,             // must be true in production (HTTPS)

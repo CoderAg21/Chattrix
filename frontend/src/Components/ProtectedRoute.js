@@ -23,11 +23,6 @@ const ProtectedRoute = ({ children }) => {
         }
         return res.json()
         
-      }).then( (data)=>{
-        // const {email,userId,iat} = data.token
-        // dispatch(identity({email:"12",userId:"11",iat:"11"}))
-        
-    
       })
       .catch(() => setIsAuthenticated(false));
     }, []);
