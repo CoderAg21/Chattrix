@@ -6,6 +6,7 @@ import { loggedOut } from "../Store/auth/authSlice";
 import { changeRoom } from '../Store/room/roomSlice';
 import Spinner from "./Spinner";
 import { showSpinner } from "../Store/spinner/spinnerSlice";
+import { Helmet } from "react-helmet";
 
 export default function Logout() {
   const navigator = useNavigate();
@@ -38,5 +39,11 @@ export default function Logout() {
     logout();
   }, []);
 
-  return <Spinner/>
+  return <>
+    <Helmet>
+        <title>Logout</title>
+        <meta name="description" content="Logout the user." />
+      </Helmet>
+   <Spinner/>
+   </>
 }

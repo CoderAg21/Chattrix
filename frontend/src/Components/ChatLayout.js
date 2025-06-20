@@ -15,6 +15,7 @@ import '../ChatLayout.css'
 import { useRef } from 'react';
 import Spinner from './Spinner';
 import { showSpinner } from '../Store/spinner/spinnerSlice';
+import { Helmet } from 'react-helmet';
 
 
 
@@ -159,6 +160,12 @@ useEffect(() => {
 
 
 return (
+  <>
+    <Helmet>
+        <title>Chat</title>
+        <meta name="description" content="Here,you chat chat with people securely." />
+      </Helmet>
+ 
   <div className="container-fluid px-0"style={{background:"rgb(244, 244, 244)"}}>
       <div className="d-flex vh-100 chatScreen">
       
@@ -249,5 +256,6 @@ return (
 
       </div>
     </div>
+     </>
   );
 }

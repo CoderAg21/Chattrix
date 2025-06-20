@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import config from '../config/env';
 import { Link } from 'react-router-dom';
-import Spinner from './Spinner';
+import {Helmet} from 'react-helmet'
 import { showSpinner } from '../Store/spinner/spinnerSlice';
 import { useDispatch } from 'react-redux';
 export default function AddContact() {
@@ -43,6 +43,11 @@ export default function AddContact() {
   };
 
   return (
+    <>
+      <Helmet>
+        <title>Add Contacts</title>
+        <meta name="description" content="Add your new contacts." />
+      </Helmet>
     <div className="container d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}>
       <div className="col-12 col-md-6 p-4 rounded shadow bg-white">
         <h2 className="text-primary text-center mb-4">Add New Contact</h2>
@@ -76,5 +81,6 @@ export default function AddContact() {
         )}
       </div>
     </div>
+    </>
   );
 }

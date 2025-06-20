@@ -7,7 +7,7 @@ import {useDispatch} from 'react-redux'
 import { loggedIn } from "../Store/auth/authSlice";
 import Spinner from "./Spinner";
 import { showSpinner } from "../Store/spinner/spinnerSlice";
-
+import { Helmet } from "react-helmet";
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -49,6 +49,12 @@ export default function Login() {
   };
 
   return (
+    <>
+      <Helmet>
+        <title>Login</title>
+        <meta name="description" content="Login to chat securely" />
+      </Helmet>
+   
     <div className="container-fluid min-vh-100 d-flex flex-column justify-content-between bg-light text-dark px-4 py-5">
       {/* Login Section */}
       <main className="d-flex flex-column align-items-center justify-content-center text-center">
@@ -108,5 +114,6 @@ export default function Login() {
         </div>
       </main>
     </div>
+    </>
   );
 }

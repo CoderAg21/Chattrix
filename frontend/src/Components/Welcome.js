@@ -1,11 +1,18 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 export default function Welcome() {
     const auth = useSelector((state) => state.auth.isLoggedIn);
   
   return (
+    <>
+      <Helmet>
+        <title>Home - Welcome to Chattrix</title>
+        <meta name="description" content="Welcome to the home page Chattrix." />
+      </Helmet>
+   
     <div className="container-fluid min-vh-100 d-flex flex-column justify-content-between bg-light text-dark px-4 py-5">
 
       {/* Main Content */}
@@ -57,5 +64,6 @@ export default function Welcome() {
 
      
     </div>
+    </>
   );
 }

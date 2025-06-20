@@ -9,7 +9,7 @@ const http = require('http');
 const {Server} = require('socket.io');
 const server = http.createServer(app);
 
-const onlineUsers = new Map(); // userId => socket.id
+const onlineUsers = new Map(); 
 app.use(cors({
   origin: config.FRONTEND_URL, 
   credentials: true

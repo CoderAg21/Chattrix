@@ -5,7 +5,7 @@ import config from '../config/env';
 import { showSpinner } from '../Store/spinner/spinnerSlice';
 import { useDispatch } from 'react-redux';
 import Spinner from './Spinner';
-
+import {Helmet} from 'react-helmet';
 export default function Register() {
   const navigate = useNavigate()
   const [message,setMessage] = useState('')
@@ -45,6 +45,11 @@ export default function Register() {
         }
   }
   return (
+    <>  <Helmet>
+        <title>Signup</title>
+        <meta name="description" content="Create a new user." />
+      </Helmet>
+   
     <div className="container-fluid min-vh-100 d-flex flex-column justify-content-between bg-light text-dark px-4 py-5">
 
       {/* Signup Section */}
@@ -118,5 +123,6 @@ export default function Register() {
 
     
     </div>
+     </>
   );
 }
