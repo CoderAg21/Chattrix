@@ -25,8 +25,9 @@ Go to the project directory
   cd my-project
 ```
 
-Install dependencies
+Install dependencies:  
 
+(It should be installed in frontend as well as backend directory using the command given below.)
 ```bash
   npm install
 ```
